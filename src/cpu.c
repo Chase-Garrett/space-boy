@@ -7,6 +7,39 @@ void unimplemented_instruction(State8080 *state) {
   exit(1);
 }
 
+// get (M) HL register pair by combining H and L registers
+uint16_t get_hl(State8080 *state) {
+  return (state->h << 8) | state->l;
+}
+
+// set (M) HL register pair by splitting 16-bit value into H and L registers
+void set_hl(State8080 *state, uint16_t value) {
+  state->h = (value >> 8) & 0xff;
+  state->l = value & 0xff;
+}
+
+// check parity function
+uint8_t parity(uint8_t answer) {
+  uint8_t parity = 0;
+  for (int i = 0; i < 8; i++) {
+    if (answer & (1 << i)) {
+      parity ^= 1;
+    }
+  }
+
+  return parity;
+}
+
+// define add function
+void add(State8080 *state, uint8_t value) {
+  uint16_t answer = (uint16_t)state->a + (uint16_t)value;
+  state->cc.z = ((answer & 0xff) == 0);
+  state->cc.s = ((answer & 0x80) != 0);
+  state->cc.cy = (answer > 0xff);
+  state->cc.p = parity(answer & 0xff);
+  state->a = answer & 0xff;
+}
+
 // define emulator function
 int emulate8080p(State8080 *state) {
   unsigned char *opcode = &state->memory[state->pc];
@@ -157,14 +190,14 @@ int emulate8080p(State8080 *state) {
     case 0x7f: unimplemented_instruction(state); break;
 
     // 0x80 - 0x8f
-    case 0x80: unimplemented_instruction(state); break;
-    case 0x81: unimplemented_instruction(state); break;
-    case 0x82: unimplemented_instruction(state); break;
-    case 0x83: unimplemented_instruction(state); break;
-    case 0x84: unimplemented_instruction(state); break;
-    case 0x85: unimplemented_instruction(state); break;
-    case 0x86: unimplemented_instruction(state); break;
-    case 0x87: unimplemented_instruction(state); break;
+    case 0x80: add(state, state->b); break;
+    case 0x81: add(state, state->c); break;
+    case 0x82: add(state, state->d); break;
+    case 0x83: add(state, state->e); break;
+    case 0x84: add(state, state->h); break;
+    case 0x85: add(state, state->l); break;
+    case 0x86: add(state, get_hl(state)); break;
+    case 0x87: add(state, state->a); break;
     case 0x88: unimplemented_instruction(state); break;
     case 0x89: unimplemented_instruction(state); break;
     case 0x8a: unimplemented_instruction(state); break;
@@ -300,6 +333,4 @@ int emulate8080p(State8080 *state) {
     case 0xfe: unimplemented_instruction(state); break;
     case 0xff: unimplemented_instruction(state); break;
   }
-
-  state->pc+=1;
 }
