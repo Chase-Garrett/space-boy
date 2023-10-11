@@ -300,4 +300,6 @@ int emulate8080p(State8080 *state) {
     case 0xfe: unimplemented_instruction(state); break;
     case 0xff: unimplemented_instruction(state); break;
   }
+
+  state->pc+=1;
 }
