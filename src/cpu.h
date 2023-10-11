@@ -29,7 +29,7 @@ typedef struct State8080 {
 } State8080;
 
 // Prototypes
-void UnimplementedInstruction(State8080* state);
-int Emulate8080Op(State8080* state);
+void unimplemented_instruction(State8080 *state);
+int emulate8080Op(State8080 *state);
 
 #endif
