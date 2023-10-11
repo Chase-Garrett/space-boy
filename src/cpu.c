@@ -13,7 +13,7 @@ int emulate8080p(State8080 *state) {
 
   switch (*opcode) {
     // 0x00 - 0x0f
-    case 0x00: unimplemented_instruction(state); break;
+    case 0x00: break;
     case 0x01: unimplemented_instruction(state); break;
     case 0x02: unimplemented_instruction(state); break;
     case 0x03: unimplemented_instruction(state); break;
@@ -21,7 +21,7 @@ int emulate8080p(State8080 *state) {
     case 0x05: unimplemented_instruction(state); break;
     case 0x06: unimplemented_instruction(state); break;
     case 0x07: unimplemented_instruction(state); break;
-    case 0x08: unimplemented_instruction(state); break;
+    case 0x08: break;
     case 0x09: unimplemented_instruction(state); break;
     case 0x0a: unimplemented_instruction(state); break;
     case 0x0b: unimplemented_instruction(state); break;
@@ -31,7 +31,7 @@ int emulate8080p(State8080 *state) {
     case 0x0f: unimplemented_instruction(state); break;
 
     // 0x10 - 0x1f
-    case 0x10: unimplemented_instruction(state); break;
+    case 0x10: break;
     case 0x11: unimplemented_instruction(state); break;
     case 0x12: unimplemented_instruction(state); break;
     case 0x13: unimplemented_instruction(state); break;
@@ -39,7 +39,7 @@ int emulate8080p(State8080 *state) {
     case 0x15: unimplemented_instruction(state); break;
     case 0x16: unimplemented_instruction(state); break;
     case 0x17: unimplemented_instruction(state); break;
-    case 0x18: unimplemented_instruction(state); break;
+    case 0x18: break;
     case 0x19: unimplemented_instruction(state); break;
     case 0x1a: unimplemented_instruction(state); break;
     case 0x1b: unimplemented_instruction(state); break;
@@ -49,7 +49,7 @@ int emulate8080p(State8080 *state) {
     case 0x1f: unimplemented_instruction(state); break;
 
     // 0x20 - 0x2f
-    case 0x20: unimplemented_instruction(state); break;
+    case 0x20: break;
     case 0x21: unimplemented_instruction(state); break;
     case 0x22: unimplemented_instruction(state); break;
     case 0x23: unimplemented_instruction(state); break;
@@ -57,7 +57,7 @@ int emulate8080p(State8080 *state) {
     case 0x25: unimplemented_instruction(state); break;
     case 0x26: unimplemented_instruction(state); break;
     case 0x27: unimplemented_instruction(state); break;
-    case 0x28: unimplemented_instruction(state); break;
+    case 0x28: break;
     case 0x29: unimplemented_instruction(state); break;
     case 0x2a: unimplemented_instruction(state); break;
     case 0x2b: unimplemented_instruction(state); break;
@@ -67,7 +67,7 @@ int emulate8080p(State8080 *state) {
     case 0x2f: unimplemented_instruction(state); break;
 
     // 0x30 - 0x3f
-    case 0x30: unimplemented_instruction(state); break;
+    case 0x30: break;
     case 0x31: unimplemented_instruction(state); break;
     case 0x32: unimplemented_instruction(state); break;
     case 0x33: unimplemented_instruction(state); break;
@@ -75,7 +75,7 @@ int emulate8080p(State8080 *state) {
     case 0x35: unimplemented_instruction(state); break;
     case 0x36: unimplemented_instruction(state); break;
     case 0x37: unimplemented_instruction(state); break;
-    case 0x38: unimplemented_instruction(state); break;
+    case 0x38: break;
     case 0x39: unimplemented_instruction(state); break;
     case 0x3a: unimplemented_instruction(state); break;
     case 0x3b: unimplemented_instruction(state); break;
