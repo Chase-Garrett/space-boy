@@ -30,6 +30,10 @@ uint8_t parity(uint8_t answer) {
   return parity;
 }
 
+//********************************************************************************
+//                         ARITHMETIC FUNCTIONS                                  *
+//********************************************************************************
+
 // define add function
 void add(State8080 *state, uint8_t value) {
   uint16_t answer = (uint16_t)state->a + (uint16_t)value;
@@ -38,6 +42,13 @@ void add(State8080 *state, uint8_t value) {
   state->cc.cy = (answer > 0xff);
   state->cc.p = parity(answer & 0xff);
   state->a = answer & 0xff;
+  state->pc += 1;
+}
+
+// define adi function
+void adi(State8080 *state) {
+  uint8_t value = state->memory[state->pc + 1];
+  add(state, value);
 }
 
 // define emulator function
