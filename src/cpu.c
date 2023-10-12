@@ -8,7 +8,7 @@ void unimplemented_instruction(State8080 *state) {
 }
 
 // get (M) HL register pair by combining H and L registers
-uint16_t get_hl(State8080 *state) {
+uint8_t get_hl(State8080 *state) {
   return (state->h << 8) | state->l;
 }
 
@@ -30,6 +30,14 @@ uint8_t parity(uint8_t answer) {
   return parity;
 }
 
+// set condition codes function
+void set_cc(State8080 *state, uint8_t value) {
+  state->cc.z = ((value & 0xff) == 0);
+  state->cc.s = ((value & 0x80) != 0);
+  state->cc.cy = (value > 0xff);
+  state->cc.p = parity(value & 0xff);
+}
+
 //********************************************************************************
 //                         ARITHMETIC FUNCTIONS                                  *
 //********************************************************************************
@@ -37,11 +45,14 @@ uint8_t parity(uint8_t answer) {
 // define add function
 void add(State8080 *state, uint8_t value) {
   uint16_t answer = (uint16_t)state->a + (uint16_t)value;
-  state->cc.z = ((answer & 0xff) == 0);
-  state->cc.s = ((answer & 0x80) != 0);
-  state->cc.cy = (answer > 0xff);
-  state->cc.p = parity(answer & 0xff);
-  state->a = answer & 0xff;
+  set_cc(state, answer);
+  state->pc += 1;
+}
+
+// define adc function
+void adc(State8080 *state, uint8_t value) {
+  uint16_t answer = (uint16_t)state->a + (uint16_t)value + (uint16_t)state->cc.cy;
+  set_cc(state, answer);
   state->pc += 1;
 }
 
@@ -279,7 +290,7 @@ int emulate8080p(State8080 *state) {
     case 0xc3: unimplemented_instruction(state); break;
     case 0xc4: unimplemented_instruction(state); break;
     case 0xc5: unimplemented_instruction(state); break;
-    case 0xc6: unimplemented_instruction(state); break;
+    case 0xc6: adi(state); break;
     case 0xc7: unimplemented_instruction(state); break;
     case 0xc8: unimplemented_instruction(state); break;
     case 0xc9: unimplemented_instruction(state); break;
