@@ -62,6 +62,32 @@ void adi(State8080 *state) {
   add(state, value);
 }
 
+// define aci function
+void aci(State8080 *state) {
+  uint8_t value = state->memory[state->pc + 1];
+  adc(state, value);
+}
+
+// define sub function
+void sub(State8080 *state, uint8_t value) {
+  uint16_t answer = (uint16_t)state->a - (uint16_t)value;
+  set_cc(state, answer);
+  state->pc += 1;
+}
+
+// define sbb function
+void sbb(State8080 *state, uint8_t value) {
+  uint16_t answer = (uint16_t)state->a - (uint16_t)value - (uint16_t)state->cc.cy;
+  set_cc(state, answer);
+  state->pc += 1;
+}
+
+// define sui function
+void sui(State8080 *state) {
+  uint8_t value = state->memory[state->pc + 1];
+  sub(state, value);
+}
+
 // define emulator function
 int emulate8080p(State8080 *state) {
   unsigned char *opcode = &state->memory[state->pc];
@@ -220,32 +246,32 @@ int emulate8080p(State8080 *state) {
     case 0x85: add(state, state->l); break;
     case 0x86: add(state, get_hl(state)); break;
     case 0x87: add(state, state->a); break;
-    case 0x88: unimplemented_instruction(state); break;
-    case 0x89: unimplemented_instruction(state); break;
-    case 0x8a: unimplemented_instruction(state); break;
-    case 0x8b: unimplemented_instruction(state); break;
-    case 0x8c: unimplemented_instruction(state); break;
-    case 0x8d: unimplemented_instruction(state); break;
-    case 0x8e: unimplemented_instruction(state); break;
-    case 0x8f: unimplemented_instruction(state); break;
+    case 0x88: adc(state, state->b); break;
+    case 0x89: adc(state, state->c); break;
+    case 0x8a: adc(state, state->d); break;
+    case 0x8b: adc(state, state->e); break;
+    case 0x8c: adc(state, state->h); break;
+    case 0x8d: adc(state, state->l); break;
+    case 0x8e: adc(state, get_hl(state)); break;
+    case 0x8f: adc(state, state->a); break;
 
     // 0x90 - 0x9f
-    case 0x90: unimplemented_instruction(state); break;
-    case 0x91: unimplemented_instruction(state); break;
-    case 0x92: unimplemented_instruction(state); break;
-    case 0x93: unimplemented_instruction(state); break;
-    case 0x94: unimplemented_instruction(state); break;
-    case 0x95: unimplemented_instruction(state); break;
-    case 0x96: unimplemented_instruction(state); break;
-    case 0x97: unimplemented_instruction(state); break;
-    case 0x98: unimplemented_instruction(state); break;
-    case 0x99: unimplemented_instruction(state); break;
-    case 0x9a: unimplemented_instruction(state); break;
-    case 0x9b: unimplemented_instruction(state); break;
-    case 0x9c: unimplemented_instruction(state); break;
-    case 0x9d: unimplemented_instruction(state); break;
-    case 0x9e: unimplemented_instruction(state); break;
-    case 0x9f: unimplemented_instruction(state); break;
+    case 0x90: sub(state, state->b); break;
+    case 0x91: sub(state, state->c); break;
+    case 0x92: sub(state, state->d); break;
+    case 0x93: sub(state, state->e); break;
+    case 0x94: sub(state, state->h); break;
+    case 0x95: sub(state, state->l); break;
+    case 0x96: sub(state, get_hl(state)); break;
+    case 0x97: sub(state, state->a); break;
+    case 0x98: sbb(state, state->b); break;
+    case 0x99: sbb(state, state->c); break;
+    case 0x9a: sbb(state, state->d); break;
+    case 0x9b: sbb(state, state->e); break;
+    case 0x9c: sbb(state, state->h); break;
+    case 0x9d: sbb(state, state->l); break;
+    case 0x9e: sbb(state, get_hl(state)); break;
+    case 0x9f: sbb(state, state->a); break;
 
     // 0xa0 - 0xaf
     case 0xa0: unimplemented_instruction(state); break;
@@ -298,7 +324,7 @@ int emulate8080p(State8080 *state) {
     case 0xcb: unimplemented_instruction(state); break;
     case 0xcc: unimplemented_instruction(state); break;
     case 0xcd: unimplemented_instruction(state); break;
-    case 0xce: unimplemented_instruction(state); break;
+    case 0xce: aci(state); break;
     case 0xcf: unimplemented_instruction(state); break;
 
     // 0xd0 - 0xdf
@@ -308,7 +334,7 @@ int emulate8080p(State8080 *state) {
     case 0xd3: unimplemented_instruction(state); break;
     case 0xd4: unimplemented_instruction(state); break;
     case 0xd5: unimplemented_instruction(state); break;
-    case 0xd6: unimplemented_instruction(state); break;
+    case 0xd6: sui(state); break;
     case 0xd7: unimplemented_instruction(state); break;
     case 0xd8: unimplemented_instruction(state); break;
     case 0xd9: unimplemented_instruction(state); break;
