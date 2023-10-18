@@ -205,6 +205,87 @@ void jm(State8080 *state) {
   }
 }
 
+// define call function
+void call(State8080 *state) {
+  uint16_t address = state->memory[state->pc + 1] | (state->memory[state->pc + 2] << 8);
+  state->memory[state->sp - 1] = (state->pc + 3) >> 8;
+  state->memory[state->sp - 2] = (state->pc + 3) & 0xff;
+  state->sp -= 2;
+  state->pc = address;
+}
+
+// define cnz function
+void cnz(State8080 *state) {
+  if (!state->cc.z) {
+    call(state);
+  } else {
+    state->pc += 2;
+  }
+}
+
+// define cz function
+void cz(State8080 *state) {
+  if (state->cc.z) {
+    call(state);
+  } else {
+    state->pc += 2;
+  }
+}
+
+// define cnc function
+void cnc(State8080 *state) {
+  if (!state->cc.cy) {
+    call(state);
+  } else {
+    state->pc += 2;
+  }
+}
+
+// define cc function
+void cc(State8080 *state) {
+  if (state->cc.cy) {
+    call(state);
+  } else {
+    state->pc += 2;
+  }
+}
+
+// define cpo function
+void cpo(State8080 *state) {
+  if (!state->cc.p) {
+    call(state);
+  } else {
+    state->pc += 2;
+  }
+}
+
+// define cpe function
+void cpe(State8080 *state) {
+  if (state->cc.p) {
+    call(state);
+  } else {
+    state->pc += 2;
+  }
+}
+
+// define cp function
+void cp(State8080 *state) {
+  if (!state->cc.s) {
+    call(state);
+  } else {
+    state->pc += 2;
+  }
+}
+
+// define cm function
+void cm(State8080 *state) {
+  if (state->cc.s) {
+    call(state);
+  } else {
+    state->pc += 2;
+  }
+}
+
 
 //********************************************************************************
 //                              EMULATE FUNCTION                                   *
