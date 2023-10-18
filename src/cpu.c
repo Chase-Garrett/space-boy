@@ -46,14 +46,12 @@ void set_cc(State8080 *state, uint8_t value) {
 void add(State8080 *state, uint8_t value) {
   uint16_t answer = (uint16_t)state->a + (uint16_t)value;
   set_cc(state, answer);
-  state->pc += 1;
 }
 
 // define adc function
 void adc(State8080 *state, uint8_t value) {
   uint16_t answer = (uint16_t)state->a + (uint16_t)value + (uint16_t)state->cc.cy;
   set_cc(state, answer);
-  state->pc += 1;
 }
 
 // define adi function
@@ -72,20 +70,57 @@ void aci(State8080 *state) {
 void sub(State8080 *state, uint8_t value) {
   uint16_t answer = (uint16_t)state->a - (uint16_t)value;
   set_cc(state, answer);
-  state->pc += 1;
 }
 
 // define sbb function
 void sbb(State8080 *state, uint8_t value) {
   uint16_t answer = (uint16_t)state->a - (uint16_t)value - (uint16_t)state->cc.cy;
   set_cc(state, answer);
-  state->pc += 1;
 }
 
 // define sui function
 void sui(State8080 *state) {
   uint8_t value = state->memory[state->pc + 1];
   sub(state, value);
+}
+
+// define inr function
+void inr(State8080 *state, uint8_t *reg) {
+  uint16_t answer = (uint16_t)*reg + 1;
+  set_cc(state, answer);
+  *reg = answer & 0xff;
+}
+
+// define dcr function
+void dcr(State8080 *state, uint8_t *reg) {
+  uint16_t answer = (uint16_t)*reg - 1;
+  set_cc(state, answer);
+  *reg = answer & 0xff;
+}
+
+// define inx function
+void inx(State8080 *state, uint8_t *reg1, uint8_t *reg2) {
+  uint16_t answer = (uint16_t)*reg1 << 8 | (uint16_t)*reg2;
+  answer += 1;
+  *reg1 = (answer >> 8) & 0xff;
+  *reg2 = answer & 0xff;
+}
+
+// define dcx function
+void dcx(State8080 *state, uint8_t *reg1, uint8_t *reg2) {
+  uint16_t answer = (uint16_t)*reg1 << 8 | (uint16_t)*reg2;
+  answer -= 1;
+  *reg1 = (answer >> 8) & 0xff;
+  *reg2 = answer & 0xff;
+}
+
+// define dad function
+void dad(State8080 *state, uint8_t *reg1, uint8_t *reg2) {
+  uint16_t answer = (uint16_t)*reg1 << 8 | (uint16_t)*reg2;
+  answer += get_hl(state);
+  state->cc.cy = (answer > 0xffff);
+  *reg1 = (answer >> 8) & 0xff;
+  *reg2 = answer & 0xff;
 }
 
 // define emulator function
@@ -97,17 +132,17 @@ int emulate8080p(State8080 *state) {
     case 0x00: break;
     case 0x01: unimplemented_instruction(state); break;
     case 0x02: unimplemented_instruction(state); break;
-    case 0x03: unimplemented_instruction(state); break;
-    case 0x04: unimplemented_instruction(state); break;
-    case 0x05: unimplemented_instruction(state); break;
+    case 0x03: inx(state, state->b, state->c); break;
+    case 0x04: inr(state, state->b); break;
+    case 0x05: dcr(state, state->b); break;
     case 0x06: unimplemented_instruction(state); break;
     case 0x07: unimplemented_instruction(state); break;
     case 0x08: break;
-    case 0x09: unimplemented_instruction(state); break;
+    case 0x09: dad(state, state->b, state->c); break;
     case 0x0a: unimplemented_instruction(state); break;
-    case 0x0b: unimplemented_instruction(state); break;
-    case 0x0c: unimplemented_instruction(state); break;
-    case 0x0d: unimplemented_instruction(state); break;
+    case 0x0b: dcx(state, state->b, state->c); break;
+    case 0x0c: inr(state, state->c); break;
+    case 0x0d: dcr(state, state->c); break;
     case 0x0e: unimplemented_instruction(state); break;
     case 0x0f: unimplemented_instruction(state); break;
 
@@ -115,17 +150,17 @@ int emulate8080p(State8080 *state) {
     case 0x10: break;
     case 0x11: unimplemented_instruction(state); break;
     case 0x12: unimplemented_instruction(state); break;
-    case 0x13: unimplemented_instruction(state); break;
-    case 0x14: unimplemented_instruction(state); break;
-    case 0x15: unimplemented_instruction(state); break;
+    case 0x13: inx(state, state->d, state->e); break;
+    case 0x14: inr(state, state->d); break;
+    case 0x15: dcr(state, state->d); break;
     case 0x16: unimplemented_instruction(state); break;
     case 0x17: unimplemented_instruction(state); break;
     case 0x18: break;
-    case 0x19: unimplemented_instruction(state); break;
+    case 0x19: dad(state, state->d, state->e); break;
     case 0x1a: unimplemented_instruction(state); break;
-    case 0x1b: unimplemented_instruction(state); break;
-    case 0x1c: unimplemented_instruction(state); break;
-    case 0x1d: unimplemented_instruction(state); break;
+    case 0x1b: dcx(state, state->d, state->e); break;
+    case 0x1c: inr(state, state->e); break;
+    case 0x1d: dcr(state, state->e); break;
     case 0x1e: unimplemented_instruction(state); break;
     case 0x1f: unimplemented_instruction(state); break;
 
@@ -133,17 +168,17 @@ int emulate8080p(State8080 *state) {
     case 0x20: break;
     case 0x21: unimplemented_instruction(state); break;
     case 0x22: unimplemented_instruction(state); break;
-    case 0x23: unimplemented_instruction(state); break;
-    case 0x24: unimplemented_instruction(state); break;
-    case 0x25: unimplemented_instruction(state); break;
+    case 0x23: inx(state, state->h, state->l); break;
+    case 0x24: inr(state, state->h); break;
+    case 0x25: dcr(state, state->h); break;
     case 0x26: unimplemented_instruction(state); break;
     case 0x27: unimplemented_instruction(state); break;
     case 0x28: break;
-    case 0x29: unimplemented_instruction(state); break;
+    case 0x29: dad(state, state->h, state->l); break;
     case 0x2a: unimplemented_instruction(state); break;
-    case 0x2b: unimplemented_instruction(state); break;
-    case 0x2c: unimplemented_instruction(state); break;
-    case 0x2d: unimplemented_instruction(state); break;
+    case 0x2b: dcx(state, state->h, state->l); break;
+    case 0x2c: inr(state, state->l); break;
+    case 0x2d: dcr(state, state->l); break;
     case 0x2e: unimplemented_instruction(state); break;
     case 0x2f: unimplemented_instruction(state); break;
 
@@ -151,17 +186,17 @@ int emulate8080p(State8080 *state) {
     case 0x30: break;
     case 0x31: unimplemented_instruction(state); break;
     case 0x32: unimplemented_instruction(state); break;
-    case 0x33: unimplemented_instruction(state); break;
-    case 0x34: unimplemented_instruction(state); break;
-    case 0x35: unimplemented_instruction(state); break;
+    case 0x33: state->sp++; break;
+    case 0x34: inr(state, get_hl(state)); break;
+    case 0x35: dcr(state, get_hl(state)); break;
     case 0x36: unimplemented_instruction(state); break;
     case 0x37: unimplemented_instruction(state); break;
     case 0x38: break;
-    case 0x39: unimplemented_instruction(state); break;
+    case 0x39: dad(state, get_hl(state), state->sp); break;
     case 0x3a: unimplemented_instruction(state); break;
-    case 0x3b: unimplemented_instruction(state); break;
-    case 0x3c: unimplemented_instruction(state); break;
-    case 0x3d: unimplemented_instruction(state); break;
+    case 0x3b: state->sp--; break;
+    case 0x3c: inr(state, state->a); break;
+    case 0x3d: dcr(state, state->a); break;
     case 0x3e: unimplemented_instruction(state); break;
     case 0x3f: unimplemented_instruction(state); break;
 
