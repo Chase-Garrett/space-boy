@@ -348,7 +348,10 @@ void rm(State8080 *state) {
   }
 }
 
-
+// define pchl function
+void pchl(State8080 *state) {
+  state->pc = (state->h << 8) | state->l;
+}
 
 //********************************************************************************
 //                              EMULATE FUNCTION                                   *
@@ -579,7 +582,7 @@ int emulate8080p(State8080 *state) {
     case 0xc1: unimplemented_instruction(state); break;
     case 0xc2: jnz(state); break;
     case 0xc3: jmp(state); break;
-    case 0xc4: unimplemented_instruction(state); break;
+    case 0xc4: cnz(state); break;
     case 0xc5: unimplemented_instruction(state); break;
     case 0xc6: adi(state); break;
     case 0xc7: unimplemented_instruction(state); break;
@@ -587,8 +590,8 @@ int emulate8080p(State8080 *state) {
     case 0xc9: unimplemented_instruction(state); break;
     case 0xca: jz(state); break;
     case 0xcb: jmp(state); break;
-    case 0xcc: unimplemented_instruction(state); break;
-    case 0xcd: unimplemented_instruction(state); break;
+    case 0xcc: cz(state); break;
+    case 0xcd: call(state); break;
     case 0xce: aci(state); break;
     case 0xcf: unimplemented_instruction(state); break;
 
@@ -597,7 +600,7 @@ int emulate8080p(State8080 *state) {
     case 0xd1: unimplemented_instruction(state); break;
     case 0xd2: (state); break;
     case 0xd3: unimplemented_instruction(state); break;
-    case 0xd4: unimplemented_instruction(state); break;
+    case 0xd4: cnc(state); break;
     case 0xd5: unimplemented_instruction(state); break;
     case 0xd6: sui(state); break;
     case 0xd7: unimplemented_instruction(state); break;
@@ -605,8 +608,8 @@ int emulate8080p(State8080 *state) {
     case 0xd9: unimplemented_instruction(state); break;
     case 0xda: jc(state); break;
     case 0xdb: unimplemented_instruction(state); break;
-    case 0xdc: unimplemented_instruction(state); break;
-    case 0xdd: unimplemented_instruction(state); break;
+    case 0xdc: cc(state); break;
+    case 0xdd: call(state); break;
     case 0xde: unimplemented_instruction(state); break;
     case 0xdf: unimplemented_instruction(state); break;
 
@@ -615,7 +618,7 @@ int emulate8080p(State8080 *state) {
     case 0xe1: unimplemented_instruction(state); break;
     case 0xe2: jpo(state); break;
     case 0xe3: unimplemented_instruction(state); break;
-    case 0xe4: unimplemented_instruction(state); break;
+    case 0xe4: cpo(state); break;
     case 0xe5: unimplemented_instruction(state); break;
     case 0xe6: unimplemented_instruction(state); break;
     case 0xe7: unimplemented_instruction(state); break;
@@ -623,8 +626,8 @@ int emulate8080p(State8080 *state) {
     case 0xe9: unimplemented_instruction(state); break;
     case 0xea: jpe(state); break;
     case 0xeb: unimplemented_instruction(state); break;
-    case 0xec: unimplemented_instruction(state); break;
-    case 0xed: unimplemented_instruction(state); break;
+    case 0xec: cpe(state); break;
+    case 0xed: call(state); break;
     case 0xee: unimplemented_instruction(state); break;
     case 0xef: unimplemented_instruction(state); break;
 
@@ -633,7 +636,7 @@ int emulate8080p(State8080 *state) {
     case 0xf1: unimplemented_instruction(state); break;
     case 0xf2: jp(state); break;
     case 0xf3: unimplemented_instruction(state); break;
-    case 0xf4: unimplemented_instruction(state); break;
+    case 0xf4: cp(state); break;
     case 0xf5: unimplemented_instruction(state); break;
     case 0xf6: unimplemented_instruction(state); break;
     case 0xf7: unimplemented_instruction(state); break;
@@ -641,8 +644,8 @@ int emulate8080p(State8080 *state) {
     case 0xf9: unimplemented_instruction(state); break;
     case 0xfa: jm(state); break;
     case 0xfb: unimplemented_instruction(state); break;
-    case 0xfc: unimplemented_instruction(state); break;
-    case 0xfd: unimplemented_instruction(state); break;
+    case 0xfc: cm(state); break;
+    case 0xfd: call(state); break;
     case 0xfe: unimplemented_instruction(state); break;
     case 0xff: unimplemented_instruction(state); break;
   }
