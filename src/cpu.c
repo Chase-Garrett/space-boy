@@ -286,6 +286,69 @@ void cm(State8080 *state) {
   }
 }
 
+// define ret function
+void ret(State8080 *state) {
+  state->pc = state->memory[state->sp] | (state->memory[state->sp + 1] << 8);
+  state->sp += 2;
+}
+
+// define rnz function
+void rnz(State8080 *state) {
+  if (!state->cc.z) {
+    ret(state);
+  }
+}
+
+// define rz function
+void rz(State8080 *state) {
+  if (state->cc.z) {
+    ret(state);
+  }
+}
+
+// define rnc function
+void rnc(State8080 *state) {
+  if (!state->cc.cy) {
+    ret(state);
+  }
+}
+
+// define rc function
+void rc(State8080 *state) {
+  if (state->cc.cy) {
+    ret(state);
+  }
+}
+
+// define rpo function
+void rpo(State8080 *state) {
+  if (!state->cc.p) {
+    ret(state);
+  }
+}
+
+// define rpe function
+void rpe(State8080 *state) {
+  if (state->cc.p) {
+    ret(state);
+  }
+}
+
+// define rp function
+void rp(State8080 *state) {
+  if (!state->cc.s) {
+    ret(state);
+  }
+}
+
+// define rm function
+void rm(State8080 *state) {
+  if (state->cc.s) {
+    ret(state);
+  }
+}
+
+
 
 //********************************************************************************
 //                              EMULATE FUNCTION                                   *
