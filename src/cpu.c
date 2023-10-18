@@ -433,16 +433,16 @@ int emulate8080p(State8080 *state) {
     // 0xc0 - 0xcf
     case 0xc0: unimplemented_instruction(state); break;
     case 0xc1: unimplemented_instruction(state); break;
-    case 0xc2: unimplemented_instruction(state); break;
-    case 0xc3: unimplemented_instruction(state); break;
+    case 0xc2: jnz(state); break;
+    case 0xc3: jmp(state); break;
     case 0xc4: unimplemented_instruction(state); break;
     case 0xc5: unimplemented_instruction(state); break;
     case 0xc6: adi(state); break;
     case 0xc7: unimplemented_instruction(state); break;
     case 0xc8: unimplemented_instruction(state); break;
     case 0xc9: unimplemented_instruction(state); break;
-    case 0xca: unimplemented_instruction(state); break;
-    case 0xcb: unimplemented_instruction(state); break;
+    case 0xca: jz(state); break;
+    case 0xcb: jmp(state); break;
     case 0xcc: unimplemented_instruction(state); break;
     case 0xcd: unimplemented_instruction(state); break;
     case 0xce: aci(state); break;
@@ -451,7 +451,7 @@ int emulate8080p(State8080 *state) {
     // 0xd0 - 0xdf
     case 0xd0: unimplemented_instruction(state); break;
     case 0xd1: unimplemented_instruction(state); break;
-    case 0xd2: unimplemented_instruction(state); break;
+    case 0xd2: (state); break;
     case 0xd3: unimplemented_instruction(state); break;
     case 0xd4: unimplemented_instruction(state); break;
     case 0xd5: unimplemented_instruction(state); break;
@@ -459,7 +459,7 @@ int emulate8080p(State8080 *state) {
     case 0xd7: unimplemented_instruction(state); break;
     case 0xd8: unimplemented_instruction(state); break;
     case 0xd9: unimplemented_instruction(state); break;
-    case 0xda: unimplemented_instruction(state); break;
+    case 0xda: jc(state); break;
     case 0xdb: unimplemented_instruction(state); break;
     case 0xdc: unimplemented_instruction(state); break;
     case 0xdd: unimplemented_instruction(state); break;
@@ -469,7 +469,7 @@ int emulate8080p(State8080 *state) {
     // 0xe0 - 0xef
     case 0xe0: unimplemented_instruction(state); break;
     case 0xe1: unimplemented_instruction(state); break;
-    case 0xe2: unimplemented_instruction(state); break;
+    case 0xe2: jpo(state); break;
     case 0xe3: unimplemented_instruction(state); break;
     case 0xe4: unimplemented_instruction(state); break;
     case 0xe5: unimplemented_instruction(state); break;
@@ -477,7 +477,7 @@ int emulate8080p(State8080 *state) {
     case 0xe7: unimplemented_instruction(state); break;
     case 0xe8: unimplemented_instruction(state); break;
     case 0xe9: unimplemented_instruction(state); break;
-    case 0xea: unimplemented_instruction(state); break;
+    case 0xea: jpe(state); break;
     case 0xeb: unimplemented_instruction(state); break;
     case 0xec: unimplemented_instruction(state); break;
     case 0xed: unimplemented_instruction(state); break;
@@ -487,7 +487,7 @@ int emulate8080p(State8080 *state) {
     // 0xf0- 0xff
     case 0xf0: unimplemented_instruction(state); break;
     case 0xf1: unimplemented_instruction(state); break;
-    case 0xf2: unimplemented_instruction(state); break;
+    case 0xf2: jp(state); break;
     case 0xf3: unimplemented_instruction(state); break;
     case 0xf4: unimplemented_instruction(state); break;
     case 0xf5: unimplemented_instruction(state); break;
@@ -495,7 +495,7 @@ int emulate8080p(State8080 *state) {
     case 0xf7: unimplemented_instruction(state); break;
     case 0xf8: unimplemented_instruction(state); break;
     case 0xf9: unimplemented_instruction(state); break;
-    case 0xfa: unimplemented_instruction(state); break;
+    case 0xfa: jm(state); break;
     case 0xfb: unimplemented_instruction(state); break;
     case 0xfc: unimplemented_instruction(state); break;
     case 0xfd: unimplemented_instruction(state); break;
