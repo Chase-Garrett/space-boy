@@ -127,6 +127,83 @@ void dad(State8080 *state, uint8_t *reg1, uint8_t *reg2) {
 //                              BRANCH FUNCTIONS                                  *
 //********************************************************************************
 
+// define jmp function
+void jmp(State8080 *state) {
+  uint16_t address = state->memory[state->pc + 1] | (state->memory[state->pc + 2] << 8);
+  state->pc = address;
+}
+
+// define jnz function
+void jnz(State8080 *state) {
+  if (!state->cc.z) {
+    jmp(state);
+  } else {
+    state->pc += 2;
+  }
+}
+
+// define jz function
+void jz(State8080 *state) {
+  if (state->cc.z) {
+    jmp(state);
+  } else {
+    state->pc += 2;
+  }
+}
+
+// define jnc function
+void jnc(State8080 *state) {
+  if (!state->cc.cy) {
+    jmp(state);
+  } else {
+    state->pc += 2;
+  }
+}
+
+// define jc function
+void jc(State8080 *state) {
+  if (state->cc.cy) {
+    jmp(state);
+  } else {
+    state->pc += 2;
+  }
+}
+
+// define jpo function
+void jpo(State8080 *state) {
+  if (!state->cc.p) {
+    jmp(state);
+  } else {
+    state->pc += 2;
+  }
+}
+
+// define jpe function
+void jpe(State8080 *state) {
+  if (state->cc.p) {
+    jmp(state);
+  } else {
+    state->pc += 2;
+  }
+}
+
+// define jp function
+void jp(State8080 *state) {
+  if (!state->cc.s) {
+    jmp(state);
+  } else {
+    state->pc += 2;
+  }
+}
+
+// define jm function
+void jm(State8080 *state) {
+  if (state->cc.s) {
+    jmp(state);
+  } else {
+    state->pc += 2;
+  }
+}
 
 
 //********************************************************************************
