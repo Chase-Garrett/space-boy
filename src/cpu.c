@@ -353,6 +353,15 @@ void pchl(State8080 *state) {
   state->pc = (state->h << 8) | state->l;
 }
 
+// define rst function
+void rst(State8080 *state) {
+  uint8_t value = state->memory[state->pc];
+  state->memory[state->sp - 1] = (state->pc + 1) >> 8;
+  state->memory[state->sp - 2] = (state->pc + 1) & 0xff;
+  state->sp -= 2;
+  state->pc = value;
+}
+
 //********************************************************************************
 //                              EMULATE FUNCTION                                   *
 //********************************************************************************
